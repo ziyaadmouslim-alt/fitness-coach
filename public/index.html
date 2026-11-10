@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="My Fitness Coach">
+<meta name="theme-color" content="#0a0b0a"><link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" href="/icons/splash-1179x2556.png" media="(device-width:393px) and (device-height:852px) and (-webkit-device-pixel-ratio:3) and (orientation:portrait)">
+<title>My Fitness Coach</title>
+<style>
+:root{--bg:#0a0b0a;--card:#151816;--c2:#202521;--g:#3ddc84;--gd:#0f3a22;--tx:#eef2ee;--mut:#8d968f;--warn:#ffb74d;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+#app{max-width:520px;margin:0 auto;padding:18px 16px 110px}
+h1{font-size:30px;line-height:1.1;margin:4px 0 6px;font-weight:800;letter-spacing:-.02em}
+h2{font-size:20px;margin:22px 0 10px;font-weight:700}
+h3{font-size:17px;margin:0 0 4px}
+.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid #232823;border-radius:20px;padding:16px;margin:12px 0}
+.hero{background:linear-gradient(160deg,var(--gd),var(--card) 70%);border-color:#1f5a38}
+.pill{display:inline-block;padding:4px 12px;border-radius:99px;background:var(--gd);color:var(--g);font-size:13px;font-weight:600}
+.pill.rest{background:#2a2540;color:#b8a9ff}
+button{font:inherit;color:var(--tx);border:0;border-radius:16px;padding:14px 18px;background:var(--c2);cursor:pointer;min-height:50px;transition:transform .12s}
+button:active{transform:scale(.97)}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+button.p{background:var(--g);color:#04170c;font-weight:800;width:100%}
+button.big{font-size:22px;padding:22px;margin-top:14px;box-shadow:0 0 0 0 rgba(61,220,132,.5);animation:pulse 2.4s infinite}
+button:disabled{opacity:.4}
+@keyframes pulse{70%{box-shadow:0 0 0 14px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+@media (prefers-reduced-motion:reduce){button.big{animation:none}.fig{animation:none!important}}
+.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}
+ul{padding-left:20px;margin:6px 0}li{margin:3px 0}
+.ex{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #232823}.ex:last-child{border:0}
+.ex b{font-weight:600}.ex span{color:var(--g);font-weight:700;white-space:nowrap}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:rgba(14,16,14,.94);backdrop-filter:blur(14px);border-top:1px solid #232823;padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;background:none;border-radius:12px;padding:6px 0;min-height:52px;font-size:11px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button i{font-style:normal;font-size:22px}nav button.on{color:var(--g)}
+details{background:var(--c2);border-radius:14px;padding:10px 14px;margin:8px 0}summary{cursor:pointer;font-weight:600;min-height:28px}
+.stat{text-align:center;padding:14px 6px}.stat b{display:block;font-size:30px;color:var(--g);line-height:1.1}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .card{margin:0}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:12px;color:var(--mut)}
+.wk div div{height:38px;border-radius:12px;background:var(--c2);display:grid;place-items:center;margin-top:4px;font-size:16px}
+.wk .d div{background:var(--g);color:#04170c}.wk .t div{outline:2px solid var(--g)}
+.run{position:fixed;inset:0;background:var(--bg);z-index:10;overflow:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.run>div{max-width:520px;margin:0 auto}
+.fig{font-size:92px;text-align:center;background:var(--c2);border-radius:24px;padding:22px;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) scale(1.04)}}
+.bar{height:6px;background:var(--c2);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g);transition:width .3s}
+.chips{display:flex;gap:8px;margin:10px 0}.chips i{flex:1;height:12px;border-radius:9px;background:var(--c2)}.chips i.f{background:var(--g)}
+.timer{font-size:56px;font-weight:800;text-align:center;color:var(--g)}
+.warn{background:#2b2312;border-color:#5a4619;color:#ffe2a8}
+input[type=time],input[type=text],input[type=number],select{font:inherit;background:var(--c2);color:var(--tx);border:1px solid #2c332d;border-radius:12px;padding:12px;width:100%;min-height:48px}
+.link{background:none;color:var(--mut);text-decoration:underline;width:100%;font-size:14px}
+</style></head><body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<div class="run" id="run" hidden></div>
+<script>
+const DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const E={
+incline:['Incline Push-ups','🧎','Hands on a sturdy table, counter or sofa edge, body in one straight line. Lower your chest toward the edge, then press away.','Sagging hips, flaring elbows wide, going too fast.'],
+knee:['Knee Push-ups','🙇','Knees on a mat, hands under shoulders, straight line from knees to head. Lower with control and push up.','Hips pushed back, head dropping, partial reps.'],
+pike:['Pike Push-ups','🔺','Make an upside-down V with hips high. Bend elbows to lower the top of your head toward the floor, then press back up.','Going too deep too soon, locking elbows hard, rounding the back.'],
+wall:['Wall Push-ups','🧱','Stand an arm’s length from a wall, hands on it at chest height. Bend elbows to bring your chest to the wall, then push away.','Feet too close to the wall, arching the lower back.'],
+squat:['Squats','🦵','Feet shoulder-width apart. Sit your hips back and down like onto a chair, chest tall, knees over toes. Stand up by pushing through your heels.','Knees caving in, heels lifting, rounding the back.'],
+lunge:['Reverse Lunges','🚶','Step one foot back and lower until both knees bend about 90°. Push through the front heel to return. Hold a wall for balance if needed.','Front knee drifting past toes, leaning forward, tiny steps.'],
+bridge:['Glute Bridge','🌉','Lie on your back, knees bent, feet flat. Push through heels to lift hips until shoulders, hips and knees form a line. Squeeze, then lower slowly.','Arching the lower back, pushing through toes.'],
+calf:['Calf Raises','🦶','Stand tall, hold a wall if needed. Rise onto your toes, pause one second, lower slowly.','Bouncing, rolling the ankles outward.'],
+deadbug:['Dead Bug','🪲','Lie on your back, arms up, knees bent over hips. Lower the opposite arm and leg slowly, keeping your lower back on the floor. Switch sides.','Lower back lifting off the floor, moving too fast, holding your breath.'],
+ytw:['Prone Y-T-W Raises','🛩️','Lie face down, forehead on the floor. Lift arms into a Y, then a T, then a W, squeezing your shoulder blades. One of each is one rep.','Shrugging shoulders to your ears, lifting with the neck.'],
+snow:['Reverse Snow Angels','👼','Lie face down, arms by your sides. Sweep arms in a wide arc overhead and back, hovering just above the floor.','Lifting the head, bending the elbows, rushing.'],
+bird:['Bird Dog','🐕','On hands and knees, reach one arm forward and the opposite leg back, keeping hips level. Hold one second, switch.','Twisting the hips, arching the back, swinging the leg high.'],
+super:['Gentle Superman','🦸','Lie face down, lift arms and legs only a few centimetres, gently. Skip this one if your lower back feels uncomfortable.','Lifting high, craning the neck, forcing it through discomfort.'],
+march:['Marching in Place','🥁','Stand tall and march, lifting knees to hip height with swinging arms. Breathe steadily.','Slouching, slamming feet down, holding your breath.']
+};
+const W={
+1:{n:'PUSH DAY',e:'💪',ex:[['incline',3,10],['knee',2,8],['pike',2,6],['wall',2,12]],msg:'💪 Monday Workout! Today is PUSH DAY. Open your fitness coach and start your workout!'},
+2:{n:'LEGS & CORE',e:'🔥',ex:[['squat',3,12],['lunge',2,8,' per leg'],['bridge',3,12],['calf',2,15],['deadbug',2,8,' per side']],msg:'🔥 Today’s workout: LEGS & CORE. Your training session is waiting!'},
+4:{n:'BACK & POSTURE',e:'🧘',ex:[['ytw',2,8],['snow',2,10],['bird',2,8,' per side'],['super',2,8]],msg:'💪 BACK & POSTURE DAY! Let’s work on strength and posture.'},
+6:{n:'FULL BODY & FITNESS',e:'⚡',ex:[['squat',2,12],['incline',2,10],['bird',2,8,' per side'],['calf',2,15],['march',3,30,' sec']],msg:'⚡ FULL BODY DAY! Let’s get moving!'}
+};
+const RESTMSG='😴 Recovery Day! Take a rest and eat balanced meals.';
+const WARM=[['Arm circles','30 seconds forward, 30 seconds back'],['Shoulder rolls','10 slow rolls backward'],['Torso twists','10 gentle twists each way'],['Hip circles','10 each direction'],['Light marching','1 minute, easy pace']];
+const MOT=['Small steps every day build a strong body.','Good form beats more reps. Quality first.','Rest is when your body grows stronger.','Consistency wins. Show up and do your best today.','Listen to your body. Smart training lasts.','You are building habits that will serve you for life.'];
+const MEALS=[
+['Breakfast','🍳','Eggs, bread and milk','2 eggs, 1–2 slices of bread, 1 glass of milk, 1 banana','Scramble or boil the eggs. Serve with bread, a banana and a glass of milk.','Yogurt with oats and fruit; or msemen with a boiled egg'],
+['Morning snack','🍌','Banana and nuts','1 banana, a small handful of almonds or walnuts','Eat together. Carry them to school or keep them handy.','Apple with peanut butter; or a yogurt'],
+['Lunch','🍚','Chicken, rice and vegetables','Chicken, rice, carrots, zucchini, tomato, olive oil','Cook the chicken with vegetables and light spices. Serve over rice with a salad.','Fish with potatoes; or lentils with rice (a great plant protein)'],
+['Afternoon snack','🥛','Yogurt and fruit','1 yogurt, seasonal fruit such as orange or strawberries','Chop the fruit into the yogurt.','Bread with cheese; or dates with a glass of milk'],
+['Dinner','🍲','Lentil soup with bread','Lentils, onion, carrot, tomato, cumin, bread, a piece of fruit','Simmer lentils with the vegetables until soft. Season and serve with bread.','Baked fish with potatoes and salad; or an omelette with vegetables']
+];
+let S={done:{},notif:{on:false,time:'18:00',last:''},allergies:'',prefs:'',log:{},cf:[],water:{},prof:{age:14,h:156,w:41,level:'Complete beginner',equip:'No equipment',loc:'Home',goals:'Build strength, develop balanced muscles, improve fitness and posture, support healthy growth and recovery',aAt:'',hAt:'',wAt:''}};
+try{const x=JSON.parse(localStorage.getItem('fc2')||'null');if(x)S=Object.assign(S,x)}catch(e){}
+const save=()=>{try{localStorage.setItem('fc2',JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const kf=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const $=s=>document.querySelector(s);
+let tab='home',unlock=false;
+const wmin=w=>5+Math.round(w.ex.reduce((a,x)=>a+x[1]*1.5,0));
+const dow=()=>new Date().getDay();
+const tk=()=>kf(new Date());
+function weekStart(d){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));x.setHours(0,0,0,0);return x}
+function sessionsIn(a,b){return Object.entries(S.done).filter(([k])=>{const d=new Date(k+'T00:00:00');return d>=a&&d<b}).map(e=>e[1])}
+function streak(){let n=0,d=new Date();for(let i=0;i<400;i++){const w=W[d.getDay()];if(w){if(S.done[kf(d)])n++;else if(i>0)break}d.setDate(d.getDate()-1)}return n}
+const NAV=[['home','🏠','Home'],['work','🏋️','Workouts'],['food','🥗','Nutrition'],['prog','📈','Progress'],['set','👤','Me']];
+function drawNav(){$('#nav').innerHTML=NAV.map(n=>`<button class="${tab===n[0]?'on':''}" data-t="${n[0]}" aria-label="${n[2]}"><i>${n[1]}</i>${n[2]}</button>`).join('')}
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(b){tab=b.dataset.t;render();scrollTo(0,0)}};
+function exList(w){return w.ex.map(x=>`<div class="ex"><b>${E[x[0]][1]} ${E[x[0]][0]}</b><span>${x[1]} × ${x[2]}${x[3]||''}</span></div>`).join('')}
+function home(){
+ const d=new Date(),w=W[d.getDay()],done=S.done[tk()];
+ const date=d.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+ let h=`<div class="mut">${date}</div>`;
+ if(w){h+=`<h1>${w.e} ${w.n}</h1><span class="pill">Training day</span>
+ <div class="card hero"><div class="mut">Estimated time</div><h3>About ${wmin(w)} minutes including warm-up</h3>${exList(w)}
+ ${done?'<p style="color:var(--g);font-weight:700;margin:12px 0 0">✅ Completed today. Great work!</p>':'<button class="p big" id="go">START WORKOUT</button>'}</div>`}
+ else h+=`<h1>😴 Recovery Day</h1><span class="pill rest">Rest day</span>
+ <div class="card hero"><h3>Your body grows stronger while you rest</h3><p class="mut">Eat balanced meals, drink water, sleep well, and do some light stretching or a walk if you feel like it.</p></div>`;
+ h+=homeX();h+=`<div class="card"><div class="mut">Today’s motivation</div><h3>${MOT[Math.floor(d/864e5)%MOT.length]}</h3></div>`;
+ const n=S.notif;
+ if(!n.on)h+=`<div class="card"><h3>🔔 Want a daily reminder?</h3><p class="mut">Set your time in Settings.</p></div>`;
+ return h}
+function work(){
+ let h='<h1>Workouts</h1><div class="mut">Your fixed weekly schedule</div>';
+ for(const i of [1,2,3,4,5,6,0]){const w=W[i];
+  h+=w?`<details ${i===dow()?'open':''}><summary>${DN[i]} · ${w.n}</summary>${exList(w)}<p class="mut">About ${wmin(w)} min</p>${i===dow()&&!S.done[tk()]?'<button class="p" id="go">Start workout</button>':''}</details>`
+  :`<details><summary>${DN[i]} · Rest day 😴</summary><p class="mut">Recovery. Eat well, hydrate, sleep.</p></details>`}
+ return h+'<div class="card warn"><b>Safety first.</b> Stop if anything hurts (sharp or joint pain, dizziness). Tiredness is okay, pain is not. Tell a parent or coach if it continues.</div>'}
+function plan(){
+ const w=W[dow()];
+ if(w&&!S.done[tk()]&&!unlock)return `<h1>Nutrition</h1><div class="card"><h3>🔒 Unlocks after today’s workout</h3><p class="mut">Finish your session and your meal plan appears here.</p><button id="peek">Preview meals anyway</button></div>`;
+ let h='<h1>Today’s meals</h1><div class="mut">Balanced, affordable food. Eat until you feel satisfied.</div>'+(W[dow()]?'<div class="card">🏋️ Training day: include carbohydrates and protein in your meals (rice, bread, eggs, yogurt, chicken) and enjoy a snack after training.</div>':'<div class="card">😴 Rest day: eat the same balanced meals. Your body repairs and grows while you rest.</div>');
+ if(S.allergies)h+=`<div class="card warn">⚠️ Your allergies: ${esc(S.allergies)}. Swap any meal item that contains them.</div>`;
+ if(S.prefs)h+=`<div class="card"><b>Your preferences:</b> ${esc(S.prefs)}</div>`;
+ MEALS.forEach(m=>{h+=`<div class="card"><div class="row"><div style="font-size:44px;flex:0 0 60px">${m[1]}</div><div><div class="mut">${m[0]}</div><h3>${m[2]}</h3></div></div>
+ <p><b>Ingredients:</b> ${m[3]}</p><p><b>How:</b> ${m[4]}</p><p class="mut"><b>Alternatives:</b> ${m[5]}</p></div>`});
+ return h+'<div class="card">💧 <b>Hydration:</b> sip water through the day, especially around training. Growing bodies need enough food, so never skip meals or diet. If you have health questions, ask a doctor.</div>'}
+function prog(){
+ const ds=Object.keys(S.done),now=new Date(),ws=weekStart(now),nx=new Date(ws);nx.setDate(nx.getDate()+7);const pv=new Date(ws);pv.setDate(pv.getDate()-7);
+ const tw=sessionsIn(ws,nx),lw=sessionsIn(pv,ws),reps=a=>a.reduce((s,x)=>s+(x.reps||0),0);
+ const exs=Object.values(S.done).reduce((s,x)=>s+(x.ex||0),0);
+ let cal='';for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(d.getDate()+i);const k=kf(d),w=W[d.getDay()];
+  cal+=`<div class="${S.done[k]?'d':''} ${k===tk()?'t':''}">${'MTWTFSS'[i]}<div>${S.done[k]?'✓':w?'•':'z'}</div></div>`}
+ const diff=reps(tw)-reps(lw);
+ const last=ds.sort().reverse().slice(0,5).map(k=>`<div class="ex"><b>${new Date(k+'T00:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})} · ${S.done[k].n}</b><span>${S.done[k].feel||'✓'}</span></div>`).join('')||'<p class="mut">No workouts yet. Your first one will appear here.</p>';
+ return `<h1>Progress</h1><div class="mut">Your journey, at your own pace</div>
+ <div class="grid" style="margin-top:12px"><div class="card stat"><b>${ds.length}</b>workouts done</div><div class="card stat"><b>${streak()}</b>workout streak</div><div class="card stat"><b>${exs}</b>exercises done</div><div class="card stat"><b>${tw.length}/4</b>this week</div></div>
+ <h2>This week</h2><div class="card"><div class="wk">${cal}</div><p class="mut" style="margin:12px 0 0">z = rest day</p></div>
+ <h2>Weekly summary</h2><div class="card"><p style="margin:0">${tw.length} workout${tw.length==1?'':'s'} and ${reps(tw)} reps this week.</p><p class="mut" style="margin:6px 0 0">${lw.length?(diff>0?`That’s ${diff} more reps than last week. Nice improvement!`:diff<0?'Fewer reps than last week, and that’s fine. Rest and recovery matter too.':'Same as last week. Steady work!'):'Complete a full week to see your improvement.'}</p></div>
+ <h2>Recent workouts</h2><div class="card">${last}</div>`}
+function settings(){
+ const n=S.notif,ok='Notification' in window,p=ok?Notification.permission:'unsupported';
+ return `<h1>Settings</h1>
+ ${notifUI()}<h2>Food</h2><div class="card"><label class="mut" for="al">Food allergies</label><input type="text" id="al" value="${esc(S.allergies)}" placeholder="e.g. nuts, eggs">
+ <label class="mut" for="pf" style="display:block;margin-top:10px">Preferences</label><input type="text" id="pf" value="${esc(S.prefs)}" placeholder="e.g. no fish, halal only"><button id="sf" style="width:100%;margin-top:12px">Save</button></div>
+ <h2>Your data</h2><div class="card"><p class="mut">Everything is stored on this device only, so clearing browser data erases it.</p><button id="rs" style="width:100%">Reset all progress</button></div>`}
+function render(){drawNav();$('#app').innerHTML={home,work,food,prog:()=>prog()+report(),set:()=>me()+settings()}[tab]();bind()}
+function bind(){
+ const g=$('#go');if(g)g.onclick=startRun;
+ const pk=$('#peek');if(pk)pk.onclick=()=>{unlock=true;render()};
+ const en=$('#en');if(en)en.onclick=async()=>{
+  S.notif.time=$('#tm').value||'18:00';
+  if(!('Notification' in window)){$('#nm').textContent='This browser does not support notifications. On iPhone, add the app to your Home Screen first.';return}
+  try{const p=await Notification.requestPermission();if(p==='granted'){S.notif.on=true;save();render()}else $('#nm').textContent='Permission '+p+'. Allow notifications for this site in your phone settings.'}catch(e){$('#nm').textContent='Could not request permission: '+e.message}};
+ const off=$('#off');if(off)off.onclick=()=>{S.notif.on=false;save();render()};
+ const sf=$('#sf');if(sf)sf.onclick=()=>{S.allergies=$('#al').value.trim();S.prefs=$('#pf').value.trim();save();sf.textContent='Saved ✓'};
+ const rs=$('#rs');if(rs)rs.onclick=()=>{if(confirm('Delete all your progress?')){S.done={};save();render()}}}
+/* Profile, food log, weekly report */
+const FD=[['Egg, boiled','1 egg',78,6.3,.6,5.3,0,25,.9],['Milk','1 glass (250 ml)',150,8,12,8,0,300,.1],['Plain yogurt','1 pot (125 g)',75,4.3,6,4,0,150,.1],['Banana','1 medium',105,1.3,27,.4,3.1,6,.3],['Apple','1 medium',95,.5,25,.3,4.4,11,.2],['Orange','1 medium',62,1.2,15,.2,3.1,52,.1],['Bread','1 slice (30 g)',80,2.7,15,1,.8,null,null],['Rice, cooked','1 cup',205,4.3,45,.4,.6,null,null],['Potato, boiled','1 medium',130,3,30,.2,2.5,null,null],['Chicken breast, cooked','100 g',165,31,0,3.6,0,15,1],['White fish, cooked','100 g',105,23,0,1,0,null,null],['Sardines, canned','100 g',208,25,0,11,0,382,2.9],['Lentils, cooked','1 cup',230,18,40,.8,15.6,38,6.6],['Chickpeas, cooked','1 cup',269,14.5,45,4.2,12.5,80,4.7],['Lentil soup','1 bowl',180,11,28,3,8,null,null],['Almonds','1 handful (28 g)',164,6,6,14,3.5,76,1],['Mixed nuts','1 handful (30 g)',180,5,6,16,2.5,null,null],['Peanut butter','1 tbsp',95,3.6,3.5,8,1,null,null],['Carrot','1 medium',25,.6,6,.1,1.7,20,.2],['Tomato','1 medium',22,1.1,4.8,.2,1.5,12,.3],['Vegetables or salad','1 bowl',50,2,10,.5,4,null,null],['Olive oil','1 tbsp',119,0,0,13.5,0,null,null],['Oats, dry','40 g',150,5,27,2.7,4,null,null],['Cheese','1 slice (20 g)',75,5,.4,6,0,null,null],['Dates','3 small',70,.5,19,0,2,null,null]];
+const allF=()=>FD.concat(S.cf);
+const dl=k=>S.log[k]||[];
+const sum=a=>{const t=[0,0,0,0,0,0,0];a.forEach(e=>e.v.forEach((x,i)=>{if(x!=null)t[i]+=x}));return t};
+const ref=a=>a<=13?[1400,2600]:a==14?[1800,2800]:[1800,3200];
+const dd=s=>new Date(s+'T00:00:00');
+const ago=d=>{if(!d)return 'Date not recorded. Please re-measure when you can.';const n=Math.floor((dd(tk())-dd(d))/864e5);return 'Updated '+(n<1?'today':n+' day'+(n>1?'s':'')+' ago')+' ('+dd(d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+')'};
+const old=d=>!d||(dd(tk())-dd(d))/864e5>30;
+let sub='plan',mt='b',perr='',rwk=0;
+const MN={b:'Breakfast',l:'Lunch',d:'Dinner',s:'Snacks'};
+function homeX(){let h=pushPrompt();const p=S.prof;
+ if(old(p.hAt)||old(p.wAt))h+=`<div class="card warn">📏 Your height and weight may have changed. Check the Me tab and update only if you measured recently.</div>`;
+ if(dow()<2)h+=`<div class="card"><h3>📊 Your weekly report is ready</h3><button class="p" data-a="rep" data-v="${dow()?1:0}" style="margin-top:8px">View report</button></div>`;
+ return h}
+function food(){
+ return `<div class="row" style="margin:8px 0">${[['plan','Meal plan'],['log','Food log']].map(x=>`<button data-a="sub" data-v="${x[0]}" class="${sub===x[0]?'p':''}">${x[1]}</button>`).join('')}</div>`+(sub==='plan'?plan():flog())}
+function flog(){
+ const k=tk(),L=dl(k),t=sum(L),p=S.prof,r=ref(p.age),wt=S.water[k]||0;
+ const bar=(l,v,m,u)=>`<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><span>${l}</span><span class="mut" style="text-align:right">${Math.round(v)} ${u}</span></div><div class="bar"><i style="width:${Math.min(100,Math.round(v/m*100))}%"></i></div></div>`;
+ const en=(t[1]*4+t[2]*4+t[3]*9)||1,pc=x=>Math.round(x/en*100);
+ let h=`<h1>Food log</h1><div class="mut">Calories and nutrients are estimates, not exact medical measurements. No food is “bad”. Balanced meals help you grow and recover.</div>
+ <div class="card hero"><div class="mut">Typical daily energy needs at age ${p.age}</div><h3>about ${r[0].toLocaleString()}–${r[1].toLocaleString()} kcal</h3><p class="mut" style="margin:4px 0 0">A broad reference range, not a goal or a limit. Needs change with growth, sex and activity. Eat until you’re satisfied, and don’t skip meals. Don’t use exercise to “make up” for food.</p></div>
+ <div class="card"><h3>Today so far</h3>${bar('Energy',t[0],r[1],'kcal')}${bar('Protein',t[1],50,'g')}${bar('Carbohydrates',t[2],300,'g')}${bar('Fat',t[3],90,'g')}${bar('Fiber',t[4],25,'g')}${bar('Calcium*',t[5],1300,'mg')}<div class="mut">Iron*: ${t[6].toFixed(1)} mg</div>
+ <div style="display:flex;height:10px;border-radius:9px;overflow:hidden;margin-top:14px"><i style="width:${pc(t[2]*4)}%;background:var(--g)"></i><i style="width:${pc(t[1]*4)}%;background:#9be8bd"></i><i style="width:${pc(t[3]*9)}%;background:#5b655d"></i></div>
+ <p class="mut" style="margin:6px 0 0">Energy from carbs / protein / fat. Typical teen range: 45–65% / 10–30% / 25–35%.</p>
+ <p class="mut">Protein: most teens need about 0.85 g per kg (≈${Math.round(p.w*.85)} g for you) up to roughly 50 g. More isn’t needed, and no supplements. *Calcium and iron count only foods with reliable data.</p>
+ ${L.length>=4&&t[0]<r[0]?'<p style="color:var(--warn)">Today’s log looks lower than usual teen needs. If you ate everything you wanted, that’s okay. If you often feel tired or hungry, eat more and talk to a parent or doctor.</p>':''}</div>
+ <div class="card"><h3>💧 Water</h3><div style="font-size:26px;min-height:36px">${'💧'.repeat(wt)||'<span class="mut" style="font-size:14px">No glasses logged yet</span>'}</div><div class="row" style="margin-top:8px"><button data-a="w" data-v="-1">− 1</button><button class="p" data-a="w" data-v="1">+ 1 glass</button></div><p class="mut" style="margin-bottom:0">${wt} glasses. Sip through the day, more when training or hot.</p></div>
+ <div class="card"><h3>Add food</h3><div class="row" style="margin:8px 0">${Object.entries(MN).map(([i,n])=>`<button data-a="mt" data-v="${i}" class="${mt===i?'p':''}" style="padding:10px 2px;font-size:13px">${n}</button>`).join('')}</div>
+ <select id="fsel" aria-label="Food">${allF().map((f,i)=>`<option value="${i}">${esc(f[0])} (${esc(f[1])})</option>`).join('')}</select>
+ <select id="fq" aria-label="Servings" style="margin-top:8px">${[1,.5,1.5,2,3].map(q=>`<option value="${q}">${q} serving${q==1?'':'s'}</option>`).join('')}</select>
+ <button class="p" data-a="addf" style="margin-top:10px">Add to ${MN[mt].toLowerCase()}</button>
+ <details><summary>Add my own food</summary><input type="text" id="cn" placeholder="Food name" style="margin:8px 0"><div class="grid"><input type="number" id="ck" placeholder="kcal"><input type="number" id="cp" placeholder="protein g"><input type="number" id="cc" placeholder="carbs g"><input type="number" id="cf" placeholder="fat g"><input type="number" id="cb" placeholder="fiber g"></div><button class="p" data-a="addc" style="margin-top:10px">Save and add</button><p class="mut">Use the label on the package for one portion.</p></details></div>`;
+ h+='<h2>Today’s meals</h2>';
+ h+=Object.entries(MN).map(([i,n])=>{const x=L.map((e,j)=>[e,j]).filter(y=>y[0].m===i);return `<div class="card"><h3>${n}</h3>${x.map(([e,j])=>`<div class="ex"><b style="font-weight:500">${esc(e.n)}<div class="mut">${esc(e.s)} · ${Math.round(e.v[0])} kcal</div></b><button data-a="del" data-v="${j}" aria-label="Remove" style="min-height:40px;padding:6px 12px">✕</button></div>`).join('')||'<span class="mut">Nothing logged yet</span>'}</div>`}).join('');
+ const hist=Object.keys(S.log).filter(d=>d!==k&&S.log[d].length).sort().reverse().slice(0,7);
+ h+=`<h2>Food history</h2><div class="card">${hist.map(d=>{const a=S.log[d],s=sum(a);return `<div class="ex"><b>${dd(d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b><span style="font-weight:500">${Math.round(s[0])} kcal · ${Math.round(s[1])} g protein</span></div>`}).join('')||'<span class="mut">Earlier days will appear here.</span>'}</div>`;
+ return h}
+function me(){
+ const p=S.prof,ds=Object.keys(S.done).sort().reverse(),T=(l,v,d)=>`<div class="card"><div class="mut">${l}</div><h3 style="font-size:26px">${v}</h3><div class="mut" style="font-size:12px">${ago(d)}</div></div>`;
+ const row=(l,v)=>`<div class="ex"><b style="font-weight:500;color:var(--mut)">${l}</b><span style="color:var(--tx);font-weight:500;white-space:normal;text-align:right">${esc(v)}</span></div>`;
+ return `<h1>Personal profile</h1><div class="mut">Only you change these. Nothing updates automatically.</div>
+ <div class="grid" style="margin-top:12px"><div style="grid-column:1/3">${T('Age',p.age+' years',p.aAt)}</div>${T('Height',p.h+' cm',p.hAt)}${T('Weight',p.w+' kg',p.wAt)}</div>
+ ${old(p.hAt)||old(p.wAt)?'<div class="card warn">📏 Measurements change quickly while you grow. If they’re old or unknown, measure again and update below.</div>':''}
+ <h2>My information</h2><div class="card">${row('Experience',p.level)}${row('Equipment',p.equip)}${row('Location',p.loc)}${row('Goals',p.goals)}${row('Schedule','Mon Push · Tue Legs & Core · Thu Back & Posture · Sat Full Body (4 days). Rest: Wed, Fri, Sun')}${row('Food allergies',S.allergies||'None reported')}${row('Food preferences',S.prefs||'None reported')}${row('Workout history',ds.length?ds.length+' workouts. Latest: '+dd(ds[0]).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' ('+S.done[ds[0]].n+')':'No workouts yet')}</div>
+ <details><summary>Update my information</summary><div class="grid" style="margin-top:10px"><div><label class="mut" for="pa">Age</label><input type="number" id="pa" value="${p.age}"></div><div><label class="mut" for="ph">Height (cm)</label><input type="number" id="ph" value="${p.h}"></div><div><label class="mut" for="pw">Weight (kg)</label><input type="number" id="pw" value="${p.w}"></div><div><label class="mut" for="pl">Experience</label><select id="pl">${['Complete beginner','Some experience','Intermediate'].map(o=>`<option ${o===p.level?'selected':''}>${o}</option>`).join('')}</select></div></div>
+ <label class="mut" for="pe">Equipment</label><input type="text" id="pe" value="${esc(p.equip)}"><label class="mut" for="po">Location</label><input type="text" id="po" value="${esc(p.loc)}"><label class="mut" for="pg">Goals</label><input type="text" id="pg" value="${esc(p.goals)}">
+ ${perr?`<p style="color:var(--warn)">${perr}</p>`:''}<button class="p" data-a="saveprof" style="margin-top:12px">Save my changes</button><button data-a="same" style="width:100%;margin-top:8px">My measurements are still correct (mark as checked today)</button></details>`}
+function report(){
+ const ws=weekStart(new Date());ws.setDate(ws.getDate()-7*rwk);const we=new Date(ws);we.setDate(we.getDate()+7);const pv=new Date(ws);pv.setDate(pv.getDate()-7);
+ const cur=sessionsIn(ws,we),prv=sessionsIn(pv,ws),mx=a=>{const o={};a.forEach(s=>Object.entries(s.xr||{}).forEach(([k,v])=>o[k]=(o[k]||0)+v));return o},c=mx(cur),q=mx(prv);
+ const imp=Object.keys(c).filter(k=>q[k]!=null&&c[k]>q[k]).map(k=>E[k][0]+' (+'+(c[k]-q[k])+' reps)');
+ const foods=new Set();for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(d.getDate()+i);dl(kf(d)).forEach(e=>foods.add(e.n))}
+ const n=cur.length,ach=[];if(n)ach.push('You trained '+n+' time'+(n>1?'s':'')+' this week');if(n>=4)ach.push('Perfect week: every planned workout done');if(streak()>=2)ach.push('Workout streak: '+streak());if(foods.size>=10)ach.push('Great food variety: '+foods.size+' different foods');if(imp.length)ach.push('Stronger at '+imp.length+' exercise'+(imp.length>1?'s':''));
+ return `<h2>Weekly report</h2><div class="row"><button data-a="rep" data-v="0" class="${rwk?'':'p'}">This week</button><button data-a="rep" data-v="1" class="${rwk?'p':''}">Last week</button></div>
+ <div class="card hero"><div class="mut">Week of ${ws.toLocaleDateString(undefined,{month:'short',day:'numeric'})}</div><h3>${n} of 4 workouts completed (${Math.round(n/4*100)}% consistency)</h3><div class="bar"><i style="width:${Math.round(n/4*100)}%"></i></div></div>
+ <div class="card"><h3>Exercises you improved at</h3><p class="mut" style="margin:0">${imp.length?imp.join(', '):'Your first full week sets your baseline. Next week we’ll compare against it.'}</p></div>
+ <div class="card"><h3>Nutrition variety</h3><p class="mut" style="margin:0">${foods.size?foods.size+' different foods logged. Variety helps you get many nutrients.':'Log your meals to see your variety.'}</p></div>
+ <div class="card"><h3>Recovery</h3><p class="mut" style="margin:0">3 planned rest days (Wed, Fri, Sun). Rest and sleep are when your body grows stronger.</p></div>
+ <div class="card"><h3>Positive achievements</h3><p class="mut" style="margin:0">${ach.length?ach.map(a=>'⭐ '+a).join('<br>'):'Every week is a fresh start. Showing up is the win.'}</p></div>`}
+function addE(f,q){const k=tk();(S.log[k]=S.log[k]||[]).push({m:mt,n:f[0],s:q+' × '+f[1],v:f.slice(2).map(x=>x==null?null:Math.round(x*q*10)/10)})}
+$('#app').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v,k=tk(),P=S.prof;
+ if(a==='sub')sub=v;else if(a==='mt')mt=v;
+ else if(a==='addf')addE(allF()[+$('#fsel').value],+$('#fq').value);
+ else if(a==='addc'){const n=$('#cn').value.trim(),g=i=>Math.max(0,+$(i).value||0);if(!n)return;const f=[n,'1 portion',g('#ck'),g('#cp'),g('#cc'),g('#cf'),g('#cb'),null,null];S.cf.push(f);addE(f,1)}
+ else if(a==='del')dl(k).splice(+v,1);
+ else if(a==='w')S.water[k]=Math.max(0,(S.water[k]||0)+ +v);
+ else if(a==='rep'){tab='prog';rwk=+v}
+ else if(a==='same'){P.aAt=P.hAt=P.wAt=k;perr=''}
+ else if(a==='saveprof'){const A=+$('#pa').value,H=+$('#ph').value,Wt=+$('#pw').value;
+  if(!(A>=8&&A<=19&&H>=100&&H<=220&&Wt>=20&&Wt<=150)){perr='Please check your numbers: age 8–19, height 100–220 cm, weight 20–150 kg.';render();return}
+  perr='';if(A!==P.age)P.aAt=k;if(H!==P.h)P.hAt=k;if(Wt!==P.w)P.wAt=k;Object.assign(P,{age:A,h:H,w:Wt,level:$('#pl').value,equip:$('#pe').value.trim(),loc:$('#po').value.trim(),goals:$('#pg').value.trim()})}
+ else return;
+ save();render()};
+/* Workout mode */
+let R=null,T=null;
+function startRun(){R={w:W[dow()],i:-1,s:0,rest:0,reps:0,exd:0,xr:{}};drawRun();$('#run').hidden=false}
+function stopRun(){clearInterval(T);R=null;$('#run').hidden=true;render()}
+function drawRun(){
+ const el=$('#run');if(!R)return;const n=R.w.ex.length;
+ const pct=Math.round(Math.max(0,R.i)/n*100);
+ let h=`<div><div class="row"><div class="bar"><i style="width:${pct}%"></i></div><button id="stop" style="flex:0 0 auto;min-height:40px;padding:8px 14px">Stop</button></div>`;
+ if(R.i===-1){
+  h+=`<h1>Warm-up</h1><div class="mut">About 5 minutes. Move gently.</div><div class="card">${WARM.map(x=>`<div class="ex"><b>${x[0]}</b><span style="color:var(--mut);font-weight:400;white-space:normal;text-align:right">${x[1]}</span></div>`).join('')}</div><button class="p" id="nx">Warm-up done, start exercises</button>`}
+ else if(R.i>=n){
+  h+=`<div class="fig" style="margin-top:20px">🏆</div><h1 style="margin-top:18px">Congratulations! You completed today’s workout!</h1><p class="mut">Saved to your progress. How did it feel?</p><div class="row"><button class="fl">Easy</button><button class="fl">Good</button><button class="fl">Hard</button></div><button class="p" id="meals" style="margin-top:14px">See today’s meals</button>`}
+ else{
+  const x=R.w.ex[R.i],e=E[x[0]],last=R.s>=x[1];
+  h+=`<div class="mut" style="margin-top:12px">Exercise ${R.i+1} of ${n}</div><h1>${e[0]}</h1><div class="fig">${e[1]}</div>
+  <p class="mut" style="margin:6px 0 0;text-align:center">Animated icon. Follow the steps below.</p>
+  <div class="card"><h3>${x[1]} sets × ${x[2]}${x[3]||''}</h3><div class="chips">${Array.from({length:x[1]},(_,k)=>`<i class="${k<R.s?'f':''}"></i>`).join('')}</div>
+  <p><b>How:</b> ${e[2]}</p><p style="margin:0"><b>Avoid:</b> ${e[3]}</p></div>`;
+  if(R.rest>0)h+=`<div class="card"><div class="mut" style="text-align:center">Rest</div><div class="timer" id="tmr">${R.rest}</div><button id="skip" style="width:100%">Skip rest</button></div>`;
+  h+=last?`<button class="p" id="nx">${R.i===n-1?'FINISH WORKOUT':'NEXT EXERCISE'}</button>`:`<button class="p" id="fs">Finish set ${R.s+1}</button>`;
+  h+=`<button class="link" id="sk">Skip this exercise</button><div class="card warn" style="margin-top:12px">Feeling pain or very tired? Tap Stop. That’s a smart choice.</div>`}
+ el.innerHTML=h+'</div>';
+ const b=id=>el.querySelector(id);
+ b('#stop').onclick=()=>{if(confirm('Stop for today? This workout won’t be marked complete.'))stopRun()};
+ const nx=b('#nx');if(nx)nx.onclick=()=>{clearInterval(T);R.rest=0;R.i++;R.s=0;if(R.i>=n)finish();drawRun()};
+ const fs=b('#fs');if(fs)fs.onclick=()=>{const x=R.w.ex[R.i];R.s++;if(x[3]!==' sec'){const v=x[2]*(x[3]?2:1);R.reps+=v;R.xr[x[0]]=(R.xr[x[0]]||0)+v}if(R.s>=x[1]){R.exd++;R.rest=0;clearInterval(T)}else{R.rest=45;clearInterval(T);T=setInterval(tick,1000)}drawRun()};
+ const sk=b('#sk');if(sk)sk.onclick=()=>{clearInterval(T);R.rest=0;R.i++;R.s=0;if(R.i>=n)finish();drawRun()};
+ const skip=b('#skip');if(skip)skip.onclick=()=>{clearInterval(T);R.rest=0;drawRun()};
+ el.querySelectorAll('.fl').forEach(f=>f.onclick=()=>{S.done[tk()].feel=f.textContent;save();el.querySelectorAll('.fl').forEach(o=>o.style.background=o===f?'var(--gd)':'');});
+ const m=b('#meals');if(m)m.onclick=()=>{unlock=true;tab='food';stopRun()}}
+function tick(){if(!R)return clearInterval(T);R.rest--;if(R.rest<=0){clearInterval(T);R.rest=0;drawRun();try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}else{const t=$('#tmr');if(t)t.textContent=R.rest}}
+function finish(){S.done[tk()]={n:R.w.n,ex:R.exd,reps:R.reps,xr:R.xr,feel:''};save()}
+/* Reminder (works while the app is open) */
+function check(){
+ const n=S.notif;if(!n.on||!('Notification' in window)||Notification.permission!=='granted')return;
+ const d=new Date(),hm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+ if(hm>=n.time&&n.last!==tk()){n.last=tk();save();
+  const w=W[d.getDay()],body=w?w.msg:RESTMSG;
+  try{new Notification('My Fitness Coach',{body,icon:undefined})}catch(e){
+   try{navigator.serviceWorker.ready.then(r=>r.showNotification('My Fitness Coach',{body}))}catch(_){}}}}
+/* Web Push (real subscription, needs the deployed server) */
+const u8=b=>{const s=atob((b+'='.repeat((4-b.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...s].map(c=>c.charCodeAt(0)))};
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+let PS={sup:false,inst:false,perm:'default',sub:false,msg:'',busy:false};
+const tzn=()=>Intl.DateTimeFormat().resolvedOptions().timeZone;
+const post=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+async function pushInit(){
+ PS.sup='serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+ PS.inst=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+ PS.perm='Notification' in window?Notification.permission:'unsupported';
+ try{if('serviceWorker' in navigator){const r=await navigator.serviceWorker.register('/sw.js');
+  if(PS.sup){const s=await r.pushManager.getSubscription();PS.sub=!!s;if(s&&PS.perm==='granted')post('/api/subscribe',{subscription:s,time:S.notif.time,tz:tzn()}).catch(()=>{})}}}
+ catch(e){PS.msg='Offline mode and push need the deployed server ('+e.message+')'}
+ render()}
+async function enablePush(){
+ const t=$('#ptm');if(t&&t.value){S.notif.time=t.value;save()}
+ PS.busy=true;PS.msg='';render();
+ try{
+  const perm=await Notification.requestPermission();PS.perm=perm;
+  if(perm!=='granted')throw new Error(perm==='denied'?'Notifications are blocked. See the steps below.':'Permission was not given.');
+  const k=await fetch('/api/vapid-public-key');if(!k.ok)throw new Error('Push server not reachable ('+k.status+').');
+  const reg=await navigator.serviceWorker.ready;
+  const sub=await reg.pushManager.getSubscription()||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8((await k.json()).key)});
+  const r=await post('/api/subscribe',{subscription:sub,time:S.notif.time,tz:tzn()});
+  if(!r.ok)throw new Error('Server rejected the subscription ('+r.status+').');
+  PS.sub=true;PS.msg='Reminders are on for '+S.notif.time+'.'
+ }catch(e){PS.msg=e.message}
+ PS.busy=false;render()}
+$('#app').addEventListener('click',async e=>{const b=e.target.closest('[data-p]');if(!b)return;const a=b.dataset.p;
+ if(a==='go'){tab='set';render();scrollTo(0,0);return}
+ if(a==='on')return enablePush();
+ try{const reg=await navigator.serviceWorker.ready,s=await reg.pushManager.getSubscription();
+  if(a==='time'){S.notif.time=$('#ptm').value||'18:00';save();if(!s)throw new Error('Not subscribed.');const r=await post('/api/subscribe',{subscription:s,time:S.notif.time,tz:tzn()});if(!r.ok)throw new Error('Server error '+r.status);PS.msg='Time saved: '+S.notif.time}
+  else if(a==='off'){if(s){await post('/api/unsubscribe',{endpoint:s.endpoint});await s.unsubscribe()}PS.sub=false;PS.msg='Reminders turned off.'}
+  else if(a==='test'){const r=await post('/api/test',{endpoint:s.endpoint});const j=await r.json().catch(()=>({}));PS.msg=r.ok?'Test sent by the server. It should arrive in a few seconds.':'Test failed: '+(j.error||r.status)}
+ }catch(err){PS.msg=err.message}
+ render()});
+function notifUI(){
+ const st=PS.perm;let b;
+ const tin=`<label class="mut" for="ptm">Reminder time (your local time)</label><input type="time" id="ptm" value="${S.notif.time}">`;
+ if(IOS&&!PS.inst)b=`<p><b>First, add the app to your Home Screen.</b> iPhone only allows notifications for installed web apps.</p><ol style="padding-left:20px"><li>Open this page in Safari.</li><li>Tap Share, then Add to Home Screen, then Add.</li><li>Open My Fitness Coach from the Home Screen.</li><li>Return to Me and tap Enable notifications.</li></ol>`;
+ else if(!PS.sup)b='<p>This browser doesn’t support web push.</p>';
+ else if(st==='denied')b='<p><b>Notifications are blocked.</b> Open the iPhone Settings app, tap Notifications, choose My Fitness Coach, and turn on Allow Notifications. Then reopen the app.</p>';
+ else if(PS.sub&&st==='granted')b=`<p style="color:var(--g);font-weight:700">✅ Reminders are on</p>${tin}<button class="p" data-p="time" style="margin-top:10px">Save time</button><button data-p="test" style="width:100%;margin-top:8px">Send a test notification</button><button data-p="off" style="width:100%;margin-top:8px">Turn off reminders</button>`;
+ else b=`${tin}<button class="p big" data-p="on" ${PS.busy?'disabled':''}>ENABLE NOTIFICATIONS</button>`;
+ return `<h2>Daily reminders</h2><div class="card"><p style="margin-top:0">One short message a day tells you if it’s a workout or rest day, even when the app is closed. You choose the time, and you can turn it off anytime.</p>${b}${PS.msg?`<p style="color:var(--g)">${esc(PS.msg)}</p>`:''}<p class="mut" style="margin-bottom:0">Status: permission ${st}, ${PS.sub?'subscribed on server':'not subscribed'}.${PS.inst?'':' Not running from the Home Screen.'}</p></div>`}
+function pushPrompt(){return PS.sub&&PS.perm==='granted'?'':`<div class="card hero"><h3>🔔 Get your daily workout reminder</h3><p class="mut">Know your workout before you open the app.</p><button class="p" data-p="go">Set up notifications</button></div>`}
+render();pushInit();
+
+</script></body></html>
